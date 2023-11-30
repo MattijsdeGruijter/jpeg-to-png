@@ -10,8 +10,6 @@ import sys
 ctk.set_appearance_mode("System")
 ctk.set_default_color_theme("blue")
 
-#moved everything into a class and nothing broke! I think..
-#Note to self: start out with a class based system next time
 class JpegToPngApp:
     
     def __init__(self, root):
@@ -32,20 +30,23 @@ class JpegToPngApp:
         
     def create_widgets(self):
         
-        self.label_filename = ctk.CTkLabel(self.frame, text="Select .jpeg files")
-        self.label_filename.grid(row=self.STARTING_ROW, column=self.STARTING_COL-1, sticky="nswe", padx=10, pady=10)
+        self.label_filename = ctk.CTkLabel(self.frame, text=".jpeg files to convert to .png")
+        self.label_filename.grid(row=self.STARTING_ROW, column=self.STARTING_COL, sticky="nswe", padx=10, pady=10)
 
-        self.select_file_button = ctk.CTkButton(self.frame, text="Select .jpeg files", command=self.select_file)
-        self.select_file_button.grid(row=self.STARTING_ROW+1, column=self.STARTING_COL-1, columnspan=1, sticky="we", padx=10, pady=1)
+        self.select_file_button = ctk.CTkButton(self.frame, text="Add .jpeg files", command=self.select_file)
+        self.select_file_button.grid(row=self.STARTING_ROW+2, column=self.STARTING_COL, columnspan=1, sticky="we", padx=10, pady=1)
+        
+        self.delete_category_button = ctk.CTkButton(self.frame, text="Remove selected file", command=self.delete_jpeg)
+        self.delete_category_button.grid(row=self.STARTING_ROW+3, column=self.STARTING_COL, columnspan=1, sticky="we", padx=10, pady=1)
         
         self.select_file_button = ctk.CTkButton(self.frame, text="Convert to .png", command=self.convert_to_png)
-        self.select_file_button.grid(row=self.STARTING_ROW+1, column=self.STARTING_COL, columnspan=1, sticky="we", padx=10, pady=1)
+        self.select_file_button.grid(row=self.STARTING_ROW+5, column=self.STARTING_COL, columnspan=1, sticky="we", padx=10, pady=1)
         
         self.jpeg_listbox = tk.Listbox(self.frame, width=50)
-        self.jpeg_listbox.grid(row=self.STARTING_ROW, column=self.STARTING_COL, sticky="nswe", columnspan=1, padx=10, pady=10)
+        self.jpeg_listbox.grid(row=self.STARTING_ROW+1, column=self.STARTING_COL, sticky="nswe", columnspan=1, padx=10, pady=10)
         
         self.scrollbar = ctk.CTkScrollbar(self.frame, command=self.jpeg_listbox.yview)
-        self.scrollbar.grid(row=self.STARTING_ROW, column=self.STARTING_COL+1, sticky="ns")
+        self.scrollbar.grid(row=self.STARTING_ROW+1, column=self.STARTING_COL+1, sticky="ns")
         self.jpeg_listbox.config(yscrollcommand=self.scrollbar.set)
     
     def select_file(self):
@@ -80,6 +81,9 @@ class JpegToPngApp:
         msg = messagebox.showinfo("Files converted!", "All jpeg files have been converted to png files.")
         if msg:
             return sys.exit()
+        
+    def delete_jpeg(self):
+        self.jpeg_listbox.delete(tk.ACTIVE)
     
 def main():
     
