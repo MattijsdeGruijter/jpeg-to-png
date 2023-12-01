@@ -1,11 +1,9 @@
 from PIL import Image
 import tkinter as tk
 import customtkinter as ctk
-from tkinter import simpledialog, ttk, filedialog, messagebox
+from tkinter import filedialog, messagebox
 import os
 import sys
-
-
 
 ctk.set_appearance_mode("System")
 ctk.set_default_color_theme("blue")
@@ -30,8 +28,12 @@ class JpegToPngApp:
         
     def create_widgets(self):
         
-        self.label_filename = ctk.CTkLabel(self.frame, text=".jpeg files to convert to .png")
-        self.label_filename.grid(row=self.STARTING_ROW, column=self.STARTING_COL, sticky="nswe", padx=10, pady=10)
+        self.create_buttons()
+        self.create_labels()
+        self.create_listboxes()
+        self.create_scrollbars()
+    
+    def create_buttons(self):
 
         self.select_file_button = ctk.CTkButton(self.frame, text="Add .jpeg files", command=self.select_file)
         self.select_file_button.grid(row=self.STARTING_ROW+2, column=self.STARTING_COL, columnspan=1, sticky="we", padx=10, pady=1)
@@ -41,15 +43,25 @@ class JpegToPngApp:
         
         self.select_file_button = ctk.CTkButton(self.frame, text="Convert to .png", command=self.convert_to_png)
         self.select_file_button.grid(row=self.STARTING_ROW+5, column=self.STARTING_COL, columnspan=1, sticky="we", padx=10, pady=1)
+                
+    def create_labels(self):
+        
+        self.label_filename = ctk.CTkLabel(self.frame, text=".jpeg files to convert to .png")
+        self.label_filename.grid(row=self.STARTING_ROW, column=self.STARTING_COL, sticky="nswe", padx=10, pady=10) 
+               
+    def create_listboxes(self):
         
         self.jpeg_listbox = tk.Listbox(self.frame, width=50)
         self.jpeg_listbox.grid(row=self.STARTING_ROW+1, column=self.STARTING_COL, sticky="nswe", columnspan=1, padx=10, pady=10)
+            
+    def create_scrollbars(self):
         
         self.scrollbar = ctk.CTkScrollbar(self.frame, command=self.jpeg_listbox.yview)
         self.scrollbar.grid(row=self.STARTING_ROW+1, column=self.STARTING_COL+1, sticky="ns")
         self.jpeg_listbox.config(yscrollcommand=self.scrollbar.set)
     
     def select_file(self):
+        
         file_path_list = filedialog.askopenfilenames(filetypes=[("JPEG Files", "*.jpeg")])
         if file_path_list:
             for file_path in file_path_list:
@@ -63,6 +75,7 @@ class JpegToPngApp:
                 self.jpeg_listbox.insert(tk.END, jpeg_file_name)
              
     def convert_to_png(self):
+        
         for jpeg_file_path, dict in self.file_path_dict.items():
             jpeg_file_name = dict["jpeg"]
             png_file_name = dict["png"]
@@ -78,11 +91,13 @@ class JpegToPngApp:
         self.message_done()
     
     def message_done(self):
+        
         msg = messagebox.showinfo("Files converted!", "All jpeg files have been converted to png files.")
         if msg:
             return sys.exit()
         
     def delete_jpeg(self):
+        
         self.jpeg_listbox.delete(tk.ACTIVE)
     
 def main():
